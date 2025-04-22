@@ -1,0 +1,44 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('products', function (Blueprint $table) {
+            if (!Schema::hasColumn('products', 'stock')) {
+                $table->integer('stock')->default(0)->after('price');
+            }
+
+            if (!Schema::hasColumn('products', 'status')) {
+                $table->string('status')->default('available')->after('stock');
+            }
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('products', function (Blueprint $table) {
+            if (Schema::hasColumn('products', 'stock')) {
+                $table->dropColumn('stock');
+            }
+
+            if (Schema::hasColumn('products', 'status')) {
+                $table->dropColumn('status');
+            }
+        });
+    }
+};
